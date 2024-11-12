@@ -30,7 +30,7 @@ class SensorTest {
 
         assertThatExceptionOfType(IllegalArgumentException.class)
             .isThrownBy(() -> sensor.setValue(-1.0))
-            .withMessageContaining("Value is out of range");
+            .withMessage("Value -1.0 is out of range 0.0 - 100.0");
     }
 
     @Test
@@ -38,7 +38,7 @@ class SensorTest {
         Sensor sensor = new Sensor("Core Temperature", 25.0, 0.0, 100.0, "Celsius");
         assertThatThrownBy(() -> sensor.setValue(101.0))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Value is out of range");
+            .hasMessage("Value 101.0 is out of range 0.0 - 100.0");
     }
 
     @Test

@@ -13,7 +13,7 @@ public class Sensor implements Serializable {
     private final double maxValue;
     private final String unit;
 
-    private static final String RANGE_ERROR = "Value is out of range %s - %s";
+    private static final String RANGE_ERROR = "Value %s is out of range %s - %s";
 
     public Sensor(
         @NonNull String name,
@@ -23,7 +23,7 @@ public class Sensor implements Serializable {
         @NonNull String unit
     ) {
         if (value <= minValue || value >= maxValue) {
-            throw new IllegalArgumentException(RANGE_ERROR.formatted(minValue, maxValue));
+            throw new IllegalArgumentException(RANGE_ERROR.formatted(value, minValue, maxValue));
         }
         this.name = name;
         this.value = value;
@@ -54,7 +54,7 @@ public class Sensor implements Serializable {
 
     public void setValue(@NonNull Double value) {
         if (value <= minValue || value >= maxValue) {
-            throw new IllegalArgumentException(RANGE_ERROR.formatted(minValue, maxValue));
+            throw new IllegalArgumentException(RANGE_ERROR.formatted(value, minValue, maxValue));
         }
         this.value = value;
     }
