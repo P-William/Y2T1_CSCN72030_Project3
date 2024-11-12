@@ -1,0 +1,2 @@
+2024-11-12 16:34:48 | System Action: Startup | Sensor Data: Temperature: 300°C, Pressure: 1000 psi, Coolant Flow: 45%, Radiation Level: Low
+2024-11-12 16:35:51 | System Action: Startup | Sensor Data: Temperature: 300°C, Pressure: 1000 psi, Coolant Flow: 45%, Radiation Level: Low
