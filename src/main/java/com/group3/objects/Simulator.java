@@ -27,11 +27,11 @@ public Simulator() {
     powerOutput = new Sensor("Power Output", 500d, 0d, 2000d, "MWh");
     corePressure = new Sensor("Core Pressure", 2000d, 0d, 5000d, "kPa");
     radiationLevel = new Sensor("Radiation Level", 0.1d, 0d, 500d, "mSv");
-    controlRodPosition = new Sensor("Control Rod Position", 50d, 0d, 100d, "Percent");
+    controlRodPosition = new Sensor("Control Rod Position", 75d, 0d, 100d, "Percent");
 
     coolantValve = new ControlDevice("Coolant Valve", 0d, 100d, 50d, "Percent");
     coolantPump = new ControlDevice("Coolant Pump", 0d, 100d, 50d, "Percent");
-    controlRods = new ControlDevice("Control Rods", 0d, 100d, 50d, "Percent");
+    controlRods = new ControlDevice("Control Rods", 0d, 100d, 75d, "Percent");
     steamRate = new ControlDevice("Steam Rate", 0d, 100d, 50d, "Percent");
     corePressureBlowOff = new ControlDevice("Core Pressure Blow Off Valve", 0d, 100d, 50d, "Percent");
 
@@ -42,10 +42,21 @@ public Simulator() {
 public void UpdateSimulator(){
 
     HandleControlInput();
+
+    if (reactorMode && reactorState == ReactorState.Critical){
+        PreventMeltdown();
+    }
 }
 //List<ControlDevice> LoadControls()
 
 private void HandleControlInput(){
+
+    UpdateControlRods();
+
+    UpdateSteamRate();
+}
+
+private void PreventMeltdown(){
 
 }
 
@@ -53,6 +64,22 @@ private void UpdateCoolantValve(){
 
 }
 
+private void UpdateControlRods(){
+    // controlRodPosition is proportionate to controlRods so auto apply new value
+    controlRodPosition.setValue(controlRods.getCurrentValue());
+
+    //before coolant reductions core temp is directly controlled by control rods
+    //core temp ranges 0 to 1200 or 12 times the 0 to 100 scale of the control rods
+    coreTemp.setValue(controlRods.getCurrentValue() * 12);
+}
+
+private void UpdateSteamRate(){
+    //100 is temp because pressure shenanigans
+    if (coreTemp.getValue() > 100){
+        //deduct coolant level by the percentage of steam flow rate?
+        coolantLevel.setValue(coolantLevel.getValue() * (steamRate.getCurrentValue() / 100));
+    }
+}
 }
 
 
