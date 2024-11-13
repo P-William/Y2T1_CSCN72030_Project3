@@ -74,6 +74,25 @@ public class ControlDevice {
     }
 
     /*
+     * Method Name: ControlDevice
+     * Description: Constructor that initializes a ControlDevice with specified device name, minimum and maximum values, current/initial value, and unit.
+     *              It sets the initial state of the device to inactive, with no feedback message, and current and target values at 0.
+     * Parameters: String deviceName, double minValue, double maxValue, double currentValue, String unit
+     * Returns: N/A (constructor)
+     */
+    public ControlDevice(String deviceName, double minValue, double maxValue, double currentValue, String unit) {
+        this.deviceName = deviceName;
+        this.isActive = false;
+        this.lastFeedbackMessage = null;
+        this.currentValue = currentValue;
+        this.targetValue = currentValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        this.unit = unit;
+        this.buttonState = false;
+    }
+
+    /*
      * Method Name: getDeviceName
      * Description: Returns the name of the device.
      * Parameters: None
