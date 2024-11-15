@@ -99,7 +99,7 @@ public class ControlDevice {
      * Returns: String (name of the device)
      */
     public String getDeviceName() {
-        return deviceName;
+        return this.deviceName;
     }
 
     /*
@@ -119,7 +119,7 @@ public class ControlDevice {
      * Returns: boolean (activation state of the device)
      */
     public boolean getIsActive() {
-        return isActive;
+        return this.isActive;
     }
 
     /*
@@ -159,7 +159,7 @@ public class ControlDevice {
      * Returns: String (last feedback message)
      */
     public String getLastFeedbackMessage() {
-        return lastFeedbackMessage;
+        return this.lastFeedbackMessage;
     }
 
     /*
@@ -179,7 +179,7 @@ public class ControlDevice {
      * Returns: double (current value)
      */
     public double getCurrentValue() {
-        return currentValue;
+        return this.currentValue;
     }
 
     /*
@@ -208,7 +208,7 @@ public class ControlDevice {
      * Returns: double (target value)
      */
     public double getTargetValue() {
-        return targetValue;
+        return this.targetValue;
     }
 
     /*
@@ -236,7 +236,7 @@ public class ControlDevice {
      * Returns: double (minimum value)
      */
     public double getMinValue() {
-        return minValue;
+        return this.minValue;
     }
 
     /*
@@ -262,7 +262,7 @@ public class ControlDevice {
      * Returns: double (maximum value)
      */
     public double getMaxValue() {
-        return maxValue;
+        return this.maxValue;
     }
 
     /*
@@ -288,7 +288,7 @@ public class ControlDevice {
      * Returns: String (unit of measurement)
      */
     public String getUnit() {
-        return unit;
+        return this.unit;
     }
 
     /*
@@ -309,7 +309,7 @@ public class ControlDevice {
      * Returns: boolean (state of the button)
      */
     public boolean isButtonState() {
-        return buttonState;
+        return this.buttonState;
     }
 
     /*
