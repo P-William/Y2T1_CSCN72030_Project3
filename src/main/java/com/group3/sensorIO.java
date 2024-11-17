@@ -1,5 +1,7 @@
 package com.group3;
 
+import com.group3.objects.Sensor;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,73 +15,139 @@ public class sensorIO {
 
         if(sensorFilePath == null || sensorFilePath.isEmpty()) {
 
-            System.err.println("Sensor file path cannot be null.");
+            throw new IllegalArgumentException("Sensor file path cannot be null or empty.");
 
         }
-
         this.sensorFilePath = sensorFilePath;
-
     }
 
     // writing sensor data to a file/pass to simulator class
 
-    public void writeSensorData (List<String> sensorData){
+    public void writeSensorData (List<Sensor> sensorData){
 
-        if(sensorData == null || sensorData.isEmpty()) {
+       if(sensorData == null || sensorData.isEmpty()) {
 
-            System.err.println("Sensor data is null or empty..... Skipping file writing.");
-            return;
-        }
+           System.err.println("List is null or empty.");
+           return;
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(sensorFilePath, true))){
+       }
 
-            for(String data : sensorData) {
+       try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(sensorFilePath))) {
 
-                writer.write(data);
-                writer.newLine();
+           oos.writeObject(sensorData);
+           System.out.println("Sensors successfully saved to " + sensorFilePath);
 
-            }
-            System.out.println("Sensor data written to file");
+       } catch (IOException e) {
 
-        } catch (IOException e) {
+           System.err.println("Error saving sensors: " + e.getMessage());
 
-            System.err.println("Error writing sensor data to file: " + e.getMessage());
-
-        }
+       }
 
     }
 
     // reading sensor data from file
 
-    public List<String> readSensorData() {
+    public List<Sensor> readSensorData() {
 
-        List<String> sensorData = new ArrayList<>();
+       List<Sensor> sensors = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(sensorFilePath))) {
+       try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(sensorFilePath))) {
 
-            String line;
-            while ((line = reader.readLine()) != null) {
+           Object objSensor = ois.readObject();
 
-                sensorData.add(line);
+           if(objSensor instanceof List<?>) {
 
-            }
+               List<?> loadedList = (List<?>) objSensor;
+               for (Object item : loadedList) {
 
-        } catch (IOException e){
+                   if(item instanceof Sensor) {
 
-            System.err.println("Error reading sensor data from file: " + e.getMessage());
+                       sensors.add((Sensor) item);
 
-        }
+                   } else {
 
-        return sensorData;
+                       System.err.println("Invalid object in sensor list: " + item);
+
+                   }
+
+               }
+
+           } else {
+
+               System.err.println("Invalid data format in sensor file.");
+
+           }
+
+       } catch(FileNotFoundException e) {
+
+           System.err.println("File not found: " + sensorFilePath);
+
+       } catch (IOException | ClassNotFoundException e) {
+
+           System.err.println("Error loading the sensors: " + e.getMessage());
+
+       }
+
+       return new ArrayList<>();
 
     }
 
-    // simulator will access this function to read sensor data
+    private void validateSensorAttributes(Sensor sensor) {
 
-    public void simulatorSensorInput() {
+        if(sensor.getValue() < sensor.getMinValue() || sensor.getValue() > sensor.getMaxValue()) {
 
-        List<String> sensorData = readSensorData();
-        System.out.println("Passing to simulator......");
+            throw new IllegalArgumentException("Sensor value is out of range.");
+
+        }
+        if(sensor.getName() == null || sensor.getName().isEmpty()) {
+
+            throw new IllegalArgumentException("Sensor name is invalid.");
+
+        }
+        if(sensor.getUnit() == null || sensor.getUnit().isEmpty()) {
+
+            throw new IllegalArgumentException("Sensor unit is invalid.");
+
+        }
+
+    }
+
+    // Validates the sensor data list
+
+    public List<Sensor> validateSensors(List<Sensor> sensors) {
+
+        if(sensors == null || sensors.isEmpty()) {
+
+            System.err.println("Sensor list is null or empty..... proceeding with default values.");
+            return new ArrayList<>();
+
+        }
+
+        List<Sensor> validatedSensors = new ArrayList<>();
+
+        for(Sensor sensor : sensors) {
+
+            if(sensor != null) {
+                try {
+
+                    validateSensorAttributes(sensor);
+                    validatedSensors.add(sensor);
+
+                } catch (IllegalArgumentException e) {
+
+                    System.err.println("Validation failed for sensor: " + e.getMessage());
+
+                }
+
+            } else {
+
+                System.err.println("Found null sensor.....skipping.");
+
+            }
+
+        }
+
+        return validatedSensors;
 
     }
 

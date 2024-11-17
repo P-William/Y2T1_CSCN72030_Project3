@@ -1,5 +1,7 @@
 package com.group3;
 
+import com.group3.ControlDevice;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class controlIO{
 
         if(controlFilePath == null || controlFilePath.isEmpty()) {
 
-            System.err.println("Control file path cannot be null or empty.");
+            throw new IllegalArgumentException("Control file path cannot be null or empty.");
 
         }
         this.controlFilePath = controlFilePath;
@@ -24,30 +26,23 @@ public class controlIO{
 
     // Method to write control data to file
 
-    public void writeControlData(List<String> controlData){
+    public void writeControlData(List<ControlDevice> controls){
 
-        if (controlData == null || controlData.isEmpty()) {
+        if(controls == null || controls.isEmpty()) {
 
-            System.err.println("Control data is empty.....skipping write.");
+            System.err.println("Controls are null or empty.");
             return;
 
         }
 
-        List<String> validatedData = validateControlData(controlData);
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(controlFilePath))) {
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(controlFilePath, true))) {
-
-            for(String data : validatedData) {
-
-                writer.write(data);
-                writer.newLine();
-
-            }
-            System.out.println("Successfully written to file.");
+            oos.writeObject(controls);
+            System.out.println("Control devices saved to file");
 
         } catch (IOException e) {
 
-            System.err.println("Error writing control data to file " + e.getMessage());
+            System.err.println("Error saving devices: " + e.getMessage());
 
         }
 
@@ -55,51 +50,23 @@ public class controlIO{
 
     // reading control data from file
 
-    public List<String> readControlData() {
+    public List<ControlDevice> readControlData() {
 
-        List<String> controlData = new ArrayList<>();
+        List<ControlDevice> controls = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(controlFilePath))) {
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(controlFilePath))) {
 
-            String line;
-            while ((line = reader.readLine()) != null){
+            return (List<ControlDevice>) ois.readObject();
 
-                controlData.add(line);
+        } catch (FileNotFoundException e){
 
-            }
+            System.err.println("File not found: " + controlFilePath);
 
-        } catch (IOException e) {
-
-            System.err.println("Error reading data from file: " + e.getMessage());
-
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading control devices: " + e.getMessage());
         }
 
-        return controlData;
-
-    }
-
-    // Validating control data
-
-    private List<String> validateControlData(List<String> controlData) {
-
-        if (controlData == null || controlData.isEmpty()) {
-
-            System.err.println("Control data is null or empty..... Proceeding with default values.");
-            return new ArrayList<>(); // Maintaining continuity with empty list
-
-        }
-        // Filter null entries
-        return controlData.stream().filter(Objects::nonNull).toList();
-
-    }
-
-    // Passing control data to the simulator
-
-    public void simulatorControlInput() {
-
-        List<String> controlData = readControlData();
-        System.out.println("Passing control data to simulator.");
-
+        return new ArrayList<>();
     }
     
 }
