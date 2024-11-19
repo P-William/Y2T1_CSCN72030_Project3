@@ -72,7 +72,7 @@ public class controlIO{
 
         }
 
-        return new ArrayList<>();
+        return controls;
     }
     
 }
