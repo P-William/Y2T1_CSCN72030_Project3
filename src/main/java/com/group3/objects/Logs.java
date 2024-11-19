@@ -22,8 +22,6 @@ public class Logs {
     private List<LogEntry> logEntries;
 
     public Logs(String logFilePath) {
-
-        List<LogEntry> logEntries = new ArrayList<>();
         this.logFilePath = logFilePath;
         this.logEntries = new ArrayList<>();
     }
@@ -64,28 +62,17 @@ public class Logs {
     }
 
     public List<String> getLogEntries() {
-
-        List<String> formattedEntries = new ArrayList<>();
-
-        for (LogEntry entry : logEntries){
-
-            formattedEntries.add(entry.toString());
-
-        }
-
-        return formattedEntries;
-
+        return logEntries.stream()
+            .map(LogEntry::toString)
+            .toList();
     }
 
     public void closeLogs() {
-
         logEntries.clear(); // clear memory
         System.out.println("Logs saved to file, system closing......");
-
     }
 
-    /* // Testing logs -- main
-    *  public static void main(String[] args) {
+    public static void main(String[] args) {
         Logs operatorLogs = new Logs("operator_logs.txt");
 
         List<String> sensorData1 = List.of("Temperature: 300°C", "Pressure: 1000 psi", "Coolant Flow: 45%", "Radiation Level: Low");
@@ -98,7 +85,7 @@ public class Logs {
         // Close the logger to clear resources
         operatorLogs.closeLogs();
     }
-    */
+
 
 }
 

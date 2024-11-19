@@ -56,8 +56,6 @@ public class controlIO{
 
     public List<ControlDevice> readControlData() {
 
-        List<ControlDevice> controls = new ArrayList<>();
-
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(controlFilePath))) {
 
             return (List<ControlDevice>) ois.readObject();
