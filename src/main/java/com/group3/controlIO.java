@@ -35,14 +35,18 @@ public class controlIO{
 
         }
 
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(controlFilePath))) {
+        for (ControlDevice control : controls) {
 
-            oos.writeObject(controls);
-            System.out.println("Control devices saved to file");
+            try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(controlFilePath))) {
 
-        } catch (IOException e) {
+                oos.writeObject(controls);
+                System.out.println("Control devices saved to file");
 
-            System.err.println("Error saving devices: " + e.getMessage());
+            } catch (IOException e) {
+
+                System.err.println("Error saving devices: " + e.getMessage());
+
+            }
 
         }
 
