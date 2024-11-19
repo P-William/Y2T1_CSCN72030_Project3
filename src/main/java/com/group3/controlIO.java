@@ -54,18 +54,22 @@ public class controlIO{
 
     // reading control data from file
 
-    public List<ControlDevice> readControlData() {
+    public List<ControlDevice> readControlData(List<ControlDevice> controls) {
 
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(controlFilePath))) {
+        for (ControlDevice control: controls) {
 
-            return (List<ControlDevice>) ois.readObject();
+            try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(controlFilePath))) {
 
-        } catch (FileNotFoundException e){
+                return (List<ControlDevice>) ois.readObject();
 
-            System.err.println("File not found: " + controlFilePath);
+            } catch (FileNotFoundException e){
 
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading control devices: " + e.getMessage());
+                System.err.println("File not found: " + controlFilePath);
+
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error loading control devices: " + e.getMessage());
+            }
+
         }
 
         return new ArrayList<>();
