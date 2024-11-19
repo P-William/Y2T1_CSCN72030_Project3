@@ -1,5 +1,7 @@
 package com.group3;
 
+import java.io.Serializable;
+
 /* Class Name: ControlDevice
  * Class Author: Brooke Cronin
  * Date: November 14, 2024
@@ -9,8 +11,10 @@ package com.group3;
  *              device name, activation state, current and target values, and more.
  *              It includes methods for managing and adjusting the device's values and state.
  */
-public class ControlDevice
+public class ControlDevice implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private String deviceName;
     private boolean isActive;
     private String lastFeedbackMessage;
@@ -426,4 +430,13 @@ public class ControlDevice
     {
         // Placeholder for logging actions
     }
+
+    /*
+    *
+    * @Override
+    public String toString() {
+        return String.format("ControlDevice{name='%s', min='%.2f', max='%.2f', current='%.2f', unit='%s'}%n",deviceName, minValue, maxValue, currentValue, unit);
+    }
+    * */
+
 }

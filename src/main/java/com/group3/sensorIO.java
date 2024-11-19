@@ -88,7 +88,7 @@ public class sensorIO {
 
        }
 
-       return new ArrayList<>();
+       return sensors;
 
     }
 
@@ -150,6 +150,31 @@ public class sensorIO {
         return validatedSensors;
 
     }
+
+    /*
+    * public static void main(String[] args) {
+        String sensorFilePath = "sensors_test.dat";
+
+        List<Sensor> sensors = new ArrayList<>();
+        sensors.add(new Sensor("Temperature", 200.0, 50.0, 250.0, "C"));
+        sensors.add(new Sensor("Pressure", 100.0, 20.0, 150.0, "PSI"));
+
+        sensorIO sensorIO = new sensorIO(sensorFilePath);
+
+        sensorIO.writeSensorData(sensors);
+
+        List<Sensor> loadedSensors = sensorIO.readSensorData();
+
+
+        System.out.println("Loaded Sensors:");
+
+        for (Sensor sensor : loadedSensors) {
+
+            System.out.println(sensor);
+
+        }
+    }
+    * */
 
 }
 
