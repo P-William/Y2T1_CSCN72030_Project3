@@ -35,14 +35,18 @@ public class controlIO{
 
         }
 
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(controlFilePath))) {
+        for (ControlDevice control : controls) {
 
-            oos.writeObject(controls);
-            System.out.println("Control devices saved to file");
+            try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(controlFilePath))) {
 
-        } catch (IOException e) {
+                oos.writeObject(controls);
+                System.out.println("Control devices saved to file");
 
-            System.err.println("Error saving devices: " + e.getMessage());
+            } catch (IOException e) {
+
+                System.err.println("Error saving devices: " + e.getMessage());
+
+            }
 
         }
 
@@ -50,18 +54,22 @@ public class controlIO{
 
     // reading control data from file
 
-    public List<ControlDevice> readControlData() {
+    public List<ControlDevice> readControlData(List<ControlDevice> controls) {
 
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(controlFilePath))) {
+        for (ControlDevice control: controls) {
 
-            return (List<ControlDevice>) ois.readObject();
+            try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(controlFilePath))) {
 
-        } catch (FileNotFoundException e){
+                return (List<ControlDevice>) ois.readObject();
 
-            System.err.println("File not found: " + controlFilePath);
+            } catch (FileNotFoundException e){
 
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading control devices: " + e.getMessage());
+                System.err.println("File not found: " + controlFilePath);
+
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Error loading control devices: " + e.getMessage());
+            }
+
         }
 
         return new ArrayList<>();
