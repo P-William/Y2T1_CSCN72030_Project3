@@ -942,7 +942,7 @@ class ControlDeviceTest {
         device.setTargetValue(targetValue);
 
         // Act
-        device.adjustCurrentValue(-decrement);
+        device.adjustCurrentValue(decrement);
 
         // Assert
         assertThat(device.getCurrentValue()).isEqualTo(initialCurrentValue - decrement);
