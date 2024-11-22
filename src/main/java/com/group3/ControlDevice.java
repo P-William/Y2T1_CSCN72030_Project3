@@ -72,11 +72,19 @@ public class ControlDevice implements Serializable
      */
     public ControlDevice(String deviceName, double minValue, double maxValue, String unit)
     {
+        if (minValue > maxValue)
+        {
+            throw new IllegalArgumentException("Minimum value cannot be greater than the maximum value.");
+        }
+        if (minValue == maxValue)
+        {
+            throw new IllegalArgumentException("Minimum and maximum values cannot be equal.");
+        }
         this.deviceName = deviceName;
         this.isActive = false;
         this.lastFeedbackMessage = null;
-        this.currentValue = 0;
-        this.targetValue = 0;
+        this.currentValue = minValue;
+        this.targetValue = minValue;
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.unit = unit;
@@ -93,6 +101,27 @@ public class ControlDevice implements Serializable
      */
     public ControlDevice(String deviceName, double minValue, double maxValue, double currentValue, String unit)
     {
+        if (minValue > maxValue)
+        {
+            throw new IllegalArgumentException("Minimum value cannot be greater than the maximum value.");
+        }
+        if (minValue == maxValue)
+        {
+            if (currentValue == minValue) {
+                throw new IllegalArgumentException("Min, max, and current values cannot all be equal.");
+            }
+            else {
+                throw new IllegalArgumentException("Minimum and maximum values cannot be equal.");
+            }
+        }
+        if (currentValue < minValue)
+        {
+            throw new IllegalArgumentException("Current value cannot be less than the minimum value.");
+        }
+        if (currentValue > maxValue)
+        {
+            throw new IllegalArgumentException("Current value cannot be greater than the maximum value.");
+        }
         this.deviceName = deviceName;
         this.isActive = false;
         this.lastFeedbackMessage = null;
@@ -123,6 +152,10 @@ public class ControlDevice implements Serializable
      */
     public void setDeviceName(String deviceName)
     {
+        if (deviceName == null || deviceName.isEmpty())
+        {
+            throw new IllegalArgumentException("Device name cannot be null or empty.");
+        }
         this.deviceName = deviceName;
     }
 
@@ -377,12 +410,12 @@ public class ControlDevice implements Serializable
         if (this.targetValue < this.currentValue)
         {
             this.currentValue -= increment;
-            this.generateFeedbackMessage("Current value decremented successfully towards target value.");
+            this.generateFeedbackMessage("Successfully decremented current value towards target value.");
         }
         else if (this.targetValue > this.currentValue)
         {
             this.currentValue += increment;
-            this.generateFeedbackMessage("Current value incremented successfully towards target value.");
+            this.generateFeedbackMessage("Successfully incremented current value towards target value.");
         }
     }
 
