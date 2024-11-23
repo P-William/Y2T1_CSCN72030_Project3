@@ -22,7 +22,7 @@ public class Sensor implements Serializable {
         @NonNull Double maxValue,
         @NonNull String unit
     ) {
-        if (value <= minValue || value >= maxValue) {
+        if (value < minValue || value > maxValue) {
             throw new IllegalArgumentException(RANGE_ERROR.formatted(value, minValue, maxValue));
         }
         this.name = name;
@@ -53,7 +53,7 @@ public class Sensor implements Serializable {
     }
 
     public void setValue(@NonNull Double value) {
-        if (value <= minValue || value >= maxValue) {
+        if (value < minValue || value > maxValue) {
             throw new IllegalArgumentException(RANGE_ERROR.formatted(value, minValue, maxValue));
         }
         this.value = value;
