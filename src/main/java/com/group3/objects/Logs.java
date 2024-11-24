@@ -72,7 +72,7 @@ public class Logs {
         System.out.println("Logs saved to file, system closing......");
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Logs operatorLogs = new Logs("operator_logs.txt");
 
         List<String> sensorData1 = List.of("Temperature: 300°C", "Pressure: 1000 psi", "Coolant Flow: 45%", "Radiation Level: Low");
@@ -84,7 +84,7 @@ public class Logs {
 
         // Close the logger to clear resources
         operatorLogs.closeLogs();
-    }
+    }*/
 
 
 }

@@ -1,4 +1,6 @@
-package com.group3;
+package com.group3.objects;
+
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -11,6 +13,7 @@ import java.io.Serializable;
  *              device name, activation state, current and target values, and more.
  *              It includes methods for managing and adjusting the device's values and state.
  */
+@ToString
 public class ControlDevice implements Serializable
 {
     private static final long serialVersionUID = 1L;

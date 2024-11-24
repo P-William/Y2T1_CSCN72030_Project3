@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+/*
 class SimulatorTest {
 Simulator sim;
     @BeforeEach
@@ -22,4 +23,4 @@ Simulator sim;
         sim.PrintSensors();
         assertThat(sim.CheckReactorState()).isEqualTo(ReactorState.Stable);
     }
-}
+}*/

@@ -1,6 +1,4 @@
-package com.group3;
-
-import com.group3.objects.Sensor;
+package com.group3.objects;
 
 import java.io.*;
 import java.util.ArrayList;
