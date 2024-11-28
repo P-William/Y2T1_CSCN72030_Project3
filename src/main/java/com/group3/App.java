@@ -20,11 +20,14 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"));
+        scene = new Scene(loadFXML("app"));
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
 
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Closing Reactor");
+        });
 
-
+        stage.setTitle("Nuclear Reactor Simulator");
         stage.setScene(scene);
         stage.show();
     }
@@ -39,8 +42,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        //System.out.println("Hello World");
-
         launch();
     }
 

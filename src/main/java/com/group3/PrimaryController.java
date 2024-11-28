@@ -1,10 +1,8 @@
 package com.group3;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.group3.objects.ControlDevice;
 import com.group3.objects.Logs;
 import com.group3.objects.Sensor;
@@ -20,8 +18,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.util.Duration;
 import lombok.NonNull;
-
-import static javafx.application.Platform.exit;
+import javafx.scene.control.Label;
 
 public class PrimaryController {
 
@@ -47,7 +44,7 @@ public class PrimaryController {
     @FXML
     private Slider steamLevelGui;
     @FXML
-    private Slider pressureValveGui;
+    public Slider pressureValveGui;
     @FXML
     private Label state;
     @FXML
@@ -57,13 +54,10 @@ public class PrimaryController {
     private Logs logs;
 
     @FXML
-    private Button exit;
-    @FXML
     private ToggleButton run;
 
     @FXML
     private void initialize() {
-        state = new Label();
         logs = new Logs("logs.txt");
         run = new ToggleButton("Run");
         simulator = new Simulator();
@@ -88,35 +82,28 @@ public class PrimaryController {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             try {
                 SimulateReactor();
-                state.setText(String.valueOf(simulator.reactorState));
+                state.setText("Reactor Sate: "+String.valueOf(simulator.reactorState).toLowerCase());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }));
-        timeline.setCycleCount(Timeline.INDEFINITE);//set the timeline to loop forever
-    }
-
-    @FXML
-    private void onButtonClicked() throws IOException {
-    System.out.println("Closing Reactor");
-    exit();
+        timeline.setCycleCount(Timeline.INDEFINITE);//set the timeline to loop forever/until the window is closed
     }
 
     @FXML
     private void onRunButtonClicked() throws IOException, InterruptedException {
         if (!run.isSelected()) {
-            System.out.println("Turning Reactor On");
+            System.out.println("Turning Reactor On!");
             timeline.play();
             run.setSelected(true);
         }
         else if(run.isSelected()) {
-            System.out.println("Turning reactor off");
+            System.out.println("Turning reactor Off!");
             timeline.pause();
             run.setSelected(false);
         }
     }
 
-   // @FXML
     private void SimulateReactor() throws IOException {
         double increment = 1d;
         coolantValve.setTargetValue(coolantValveGui.getValue());

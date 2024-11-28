@@ -42,7 +42,7 @@ public Simulator() {
     steamRate = new ControlDevice("Steam Rate", 0d, 100d, 10d, "Percent");
     corePressureBlowOff = new ControlDevice("Core Pressure Blow Off Valve", 0d, 100d, 0d, "Percent");
 
-    reactorState = ReactorState.Stable;
+    reactorState = ReactorState.STABLE;
     reactorMode = true;
 
     controlIO = new controlIO("controls.txt");
@@ -71,7 +71,7 @@ public void UpdateSimulator() {
     HandleControlInput();
 
     reactorState =  CheckReactorState();
-    if (reactorMode && reactorState == ReactorState.Critical) {
+    if (reactorMode && reactorState == ReactorState.CRITICAL) {
         PreventMeltdown();
     }
 
@@ -95,13 +95,13 @@ private void HandleControlInput() {
 }
 public ReactorState CheckReactorState(){
     if (coreTemp.getValue() > 1100)
-        reactorState = ReactorState.Meltdown;
+        reactorState = ReactorState.MELTDOWN;
     else if (coreTemp.getValue() > 900)
-        reactorState = ReactorState.Critical;
+        reactorState = ReactorState.CRITICAL;
     else if (coreTemp.getValue() > 600)
-        reactorState = ReactorState.Warning;
+        reactorState = ReactorState.WARNING;
     else
-        reactorState = ReactorState.Stable;
+        reactorState = ReactorState.STABLE;
 
     return reactorState;
 }
