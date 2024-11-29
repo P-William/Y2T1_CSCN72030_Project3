@@ -13,41 +13,41 @@
                </VBox>
                <Pane prefHeight="350.0" prefWidth="33.0" />
                <VBox id="VBoxCoolantValue" prefHeight="200.0" prefWidth="100.0">
-                  <Slider id="SliderCoolantValue" fx:id="coolantValveGui" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" stylesheets="@styles.css" />
+                  <Slider id="SliderCoolantValue" fx:id="coolantValveGui" orientation="VERTICAL" minorTickCount="24" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" />
                   <Pane prefHeight="20.0" prefWidth="87.0" />
                   <Label id="LblCoolantValue" prefHeight="41.0" prefWidth="94.0" text="Coolant Valve" textAlignment="CENTER" wrapText="true" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
-                  <Label layoutX="10.0" layoutY="212.0" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblCoolantValveTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblCoolantValveCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
                </VBox>
                <VBox id="VBoxCoolantPump" prefHeight="200.0" prefWidth="100.0">
-                  <Slider id="SliderCoolantPump" fx:id="coolantPumpGui" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" stylesheets="@styles.css" />
+                  <Slider id="coolantPumpGui" fx:id="coolantPumpGui" orientation="VERTICAL" minorTickCount="24" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" />
                   <Pane prefHeight="20.0" prefWidth="86.0" />
                   <Label id="LblCoolantPump" prefHeight="41.0" prefWidth="94.0" text="Coolant Pump" textAlignment="CENTER" wrapText="true" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblCoolantPumpTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblCoolantPumpCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
                </VBox>
                <Pane layoutX="95.0" layoutY="10.0" prefHeight="350.0" prefWidth="33.0" />
                <VBox id="VBoxControlRods" prefHeight="200.0" prefWidth="100.0">
-                  <Slider id="SliderControlRods" fx:id="controlRodGui" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" stylesheets="@styles.css" />
+                  <Slider id="controlRodGui" fx:id="controlRodGui" orientation="VERTICAL" minorTickCount="24" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" />
                   <Pane prefHeight="20.0" prefWidth="87.0" />
                   <Label id="LblControlRods" prefHeight="41.0" prefWidth="97.0" text="Control Rods" textAlignment="CENTER" wrapText="true" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblControlRodsTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblControlRodsCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
                </VBox>
                <Pane layoutX="190.0" layoutY="10.0" prefHeight="350.0" prefWidth="33.0" />
                <VBox id="VBoxSteamOutput" prefHeight="369.0" prefWidth="115.0">
-                  <Slider id="SliderSteamOutput" fx:id="steamLevelGui" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" stylesheets="@styles.css" />
+                  <Slider id="steamLevelGui" fx:id="steamLevelGui" orientation="VERTICAL" minorTickCount="24" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" />
                   <Pane prefHeight="20.0" prefWidth="87.0" />
                   <Label id="LblSteamOutput" prefHeight="41.0" prefWidth="90.0" text="Steam Output" textAlignment="CENTER" wrapText="true" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
-                  <Label prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblSteamOutputTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblSteamOutputCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
                </VBox>
                <VBox id="VBoxPressureValve" layoutX="411.0" layoutY="10.0" prefHeight="369.0" prefWidth="115.0">
-                  <Slider id="SliderPressureValve" fx:id="pressureValveGui" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" stylesheets="@styles.css" />
+                  <Slider id="pressureValveGui" fx:id="pressureValveGui" orientation="VERTICAL" minorTickCount="24" showTickLabels="true" showTickMarks="true" snapToTicks="true" stylesheets="@styles.css" />
                   <Pane prefHeight="20.0" prefWidth="87.0" />
                   <Label id="LblPressureValve" prefHeight="41.0" prefWidth="90.0" text="Pressure Valve" textAlignment="CENTER" wrapText="true" />
-            <Label prefHeight="18.0" prefWidth="90.0" text="0" />
-            <Label prefHeight="18.0" prefWidth="90.0" text="0" />
+            <Label fx:id="LblPressureValveTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+            <Label fx:id="LblPressureValveCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
                </VBox>
             </HBox>
             <Pane prefHeight="95.0" prefWidth="682.0" />
@@ -91,6 +91,6 @@
                </VBox>
             </HBox>
          </VBox>
-         <ToggleButton id="run" layoutX="736.0" layoutY="285.0" mnemonicParsing="false" onAction="#onRunButtonClicked" text="Run" />
-         <Label fx:id="state" layoutX="729.0" layoutY="230.0" prefHeight="48.0" prefWidth="125.0" text="Reactor Sate: unknown" textAlignment="CENTER" wrapText="true" />
+   <ToggleButton fx:id="pause" layoutX="736.0" layoutY="285.0" mnemonicParsing="false" text="Resume" />
+   <Label fx:id="state" layoutX="729.0" layoutY="230.0" prefHeight="48.0" prefWidth="125.0" text="Reactor Sate: unknown" textAlignment="CENTER" wrapText="true" />
    </Pane>
