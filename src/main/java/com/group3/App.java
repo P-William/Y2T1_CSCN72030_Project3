@@ -1,15 +1,14 @@
 package com.group3;
 
-import com.group3.objects.Sensor;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * JavaFX App
@@ -22,6 +21,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("app"));
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+
 
         stage.setOnCloseRequest(event -> {
             System.out.println("Closing Reactor");

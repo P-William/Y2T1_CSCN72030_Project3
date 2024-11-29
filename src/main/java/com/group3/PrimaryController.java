@@ -3,6 +3,8 @@ package com.group3;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import com.group3.objects.ControlDevice;
 import com.group3.objects.Logs;
 import com.group3.objects.Sensor;
@@ -16,12 +18,13 @@ import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import lombok.NonNull;
 import javafx.scene.control.Label;
 
 public class PrimaryController {
-
 
     private ControlDevice coolantValve = new ControlDevice("Coolant Valve", 0d, 100d, 50d, "Percent");
     private ControlDevice coolantPump = new ControlDevice("Coolant Pump", 0d, 100d, 50d, "Percent");
@@ -36,10 +39,8 @@ public class PrimaryController {
 
     private Simulator simulator;
 
-
-
-
-
+    @FXML
+    private ImageView imageViewAIImage;
 
     @FXML
     private Slider coolantValveGui;
@@ -84,6 +85,8 @@ public class PrimaryController {
 
     @FXML
     private void initialize() {
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/reactor_image.png")));
+        imageViewAIImage.setImage(image);
         logs = new Logs("logs.txt");
         simulator = new Simulator();
         controls = new ArrayList<>();
