@@ -1,5 +1,25 @@
-.button {
-    -fx-text-fill: blue;
+/* Default/Resume state (not selected) */
+.toggle-button {
+    -fx-background-color: #D3D3D3; /* Background color */
+    -fx-border-color: #4B4B4B;   /* Border color */
+    -fx-border-width: 1;          /* Border thickness */
+    -fx-border-radius: 5;         /* Rounded corners */
+}
+
+/* Selected/Pause state */
+.toggle-button:selected {
+    -fx-background-color: #D3D3D3; /* Background color */
+    -fx-border-color: #4B4B4B;   /* Border color */
+    -fx-border-width: 1;          /* Border thickness */
+    -fx-border-radius: 5;         /* Rounded corners */
+}
+
+.pane {
+    -fx-background-color: #edfcff; /* Background color */
+}
+
+.label {
+    -fx-text-fill: #4B4B4B;   /* Text color */
 }
 
 .slider .track {
@@ -21,13 +41,12 @@
     -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0); /* Remove any shadow */
 }
 
-
 .slider .tick-mark {
-    -fx-stroke: #D3D3D3; /* Tick mark color: medium grey */
+    -fx-stroke: #bababa; /* Tick mark color */
 }
 
 .slider .tick-label {
-    -fx-text-fill: #4B4B4B; /* Tick label color: light grey */
+    -fx-text-fill: #4B4B4B; /* Tick label color */
 }
 
 
