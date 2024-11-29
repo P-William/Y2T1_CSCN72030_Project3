@@ -28,6 +28,7 @@ public class App extends Application {
         });
 
         stage.setTitle("Nuclear Reactor Simulator");
+        stage.getIcons().add(new Image(getClass().getResource("icon.png").toExternalForm()));
         stage.setScene(scene);
         stage.show();
     }
