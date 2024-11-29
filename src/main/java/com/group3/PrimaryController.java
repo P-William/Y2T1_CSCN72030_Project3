@@ -85,7 +85,7 @@ public class PrimaryController {
 
     @FXML
     private void initialize() {
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/reactor_image.png")));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("reactor_image.png")));
         imageViewAIImage.setImage(image);
         logs = new Logs("logs.txt");
         simulator = new Simulator();
