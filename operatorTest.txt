@@ -1,0 +1,1 @@
+2024-11-29 21:28:25 | System Action: Startup | Sensor Data: "Temperature: 300°C", "Pressure: 1000 psi", "Coolant Flow: 45%", "Radiation Level: Low"
