@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="862.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group3.PrimaryController">
+         <VBox alignment="CENTER" layoutX="14.0" layoutY="6.0" prefHeight="583.0" prefWidth="681.0">
+            <HBox id="HBoxControlDevices" prefHeight="248.0" prefWidth="682.0">
+               <VBox id="VBoxCoolantPump" layoutX="115.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                  <Pane prefHeight="201.0" prefWidth="76.0" />
+                  <Label id="LblCoolantPump" prefHeight="19.0" prefWidth="93.0" text="Target Value: " textAlignment="CENTER" wrapText="true" />
+                  <Label id="LblCoolantPump" layoutX="10.0" layoutY="212.0" prefHeight="18.0" prefWidth="96.0" text="Current Value: " textAlignment="CENTER" wrapText="true" />
+               </VBox>
+               <Pane prefHeight="350.0" prefWidth="33.0" />
+               <VBox id="VBoxCoolantValue" prefHeight="200.0" prefWidth="100.0">
+                  <Slider id="SliderCoolantValue" fx:id="coolantValveGui" minorTickCount="24" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <Pane prefHeight="20.0" prefWidth="87.0" />
+                  <Label id="LblCoolantValue" prefHeight="41.0" prefWidth="94.0" text="Coolant Valve" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="LblCoolantValveTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblCoolantValveCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+               </VBox>
+               <VBox id="VBoxCoolantPump" prefHeight="200.0" prefWidth="100.0">
+                  <Slider id="coolantPumpGui" fx:id="coolantPumpGui" minorTickCount="24" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <Pane prefHeight="20.0" prefWidth="86.0" />
+                  <Label id="LblCoolantPump" prefHeight="41.0" prefWidth="94.0" text="Coolant Pump" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="LblCoolantPumpTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblCoolantPumpCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+               </VBox>
+               <Pane layoutX="95.0" layoutY="10.0" prefHeight="350.0" prefWidth="33.0" />
+               <VBox id="VBoxControlRods" prefHeight="200.0" prefWidth="100.0">
+                  <Slider id="controlRodGui" fx:id="controlRodGui" minorTickCount="24" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <Pane prefHeight="20.0" prefWidth="87.0" />
+                  <Label id="LblControlRods" prefHeight="41.0" prefWidth="97.0" text="Control Rods" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="LblControlRodsTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblControlRodsCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+               </VBox>
+               <Pane layoutX="190.0" layoutY="10.0" prefHeight="350.0" prefWidth="33.0" />
+               <VBox id="VBoxSteamOutput" prefHeight="369.0" prefWidth="115.0">
+                  <Slider id="steamLevelGui" fx:id="steamLevelGui" minorTickCount="24" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <Pane prefHeight="20.0" prefWidth="87.0" />
+                  <Label id="LblSteamOutput" prefHeight="41.0" prefWidth="90.0" text="Steam Output" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="LblSteamOutputTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+                  <Label fx:id="LblSteamOutputCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+               </VBox>
+               <VBox id="VBoxPressureValve" layoutX="411.0" layoutY="10.0" prefHeight="369.0" prefWidth="115.0">
+                  <Slider id="pressureValveGui" fx:id="pressureValveGui" minorTickCount="24" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                  <Pane prefHeight="20.0" prefWidth="87.0" />
+                  <Label id="LblPressureValve" prefHeight="41.0" prefWidth="90.0" text="Pressure Valve" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="LblPressureValveTargetValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+            <Label fx:id="LblPressureValveCurrentValue" prefHeight="18.0" prefWidth="90.0" text="0" />
+               </VBox>
+            </HBox>
+            <Pane prefHeight="95.0" prefWidth="682.0" />
+            <HBox id="HBoxSensors" prefHeight="184.0" prefWidth="682.0">
+               <VBox id="VBoxSensorNames" prefHeight="350.0" prefWidth="189.0">
+                  <Pane prefHeight="3.0" prefWidth="175.0" />
+                  <Label id="LblCoolantTemperatureName" text="Coolant Temperature (0-12000)" />
+                  <Pane prefHeight="6.0" prefWidth="175.0" />
+                  <Label id="LblCoolantLevelName" prefHeight="17.0" prefWidth="174.0" text="Coolant Level (0-350)" />
+                  <Pane layoutX="10.0" layoutY="27.0" prefHeight="7.0" prefWidth="175.0" />
+                  <Label id="LblCoreTemperatureName" prefHeight="17.0" prefWidth="183.0" text="Core Temperature (0-12000)" />
+                  <Pane layoutX="10.0" layoutY="58.0" prefHeight="7.0" prefWidth="175.0" />
+                  <Label id="LblPowerOutputName" prefHeight="17.0" prefWidth="183.0" text="Power Output (0-2000)" />
+                  <Pane layoutX="10.0" layoutY="89.0" prefHeight="7.0" prefWidth="175.0" />
+                  <Label id="LblCorePressureName" prefHeight="17.0" prefWidth="184.0" text="Core Pressure (0-5000)" />
+                  <Pane layoutX="10.0" layoutY="119.0" prefHeight="7.0" prefWidth="175.0" />
+                  <Label id="LblRadsName" prefHeight="17.0" prefWidth="188.0" text="Rads (0-500)" />
+                  <Pane layoutX="10.0" layoutY="150.0" prefHeight="7.0" prefWidth="175.0" />
+                  <Label id="LblControlRodsPositionName" prefHeight="17.0" prefWidth="186.0" text="Control Rod Position (0-100)" />
+               </VBox>
+               <VBox prefHeight="200.0" prefWidth="100.0">
+                  <ListView fx:id="sensorList" prefHeight="168.0" prefWidth="100.0" />
+                  <Pane prefHeight="0.0" prefWidth="100.0" />
+               </VBox>
+               <Pane prefHeight="181.0" prefWidth="6.0" />
+               <VBox id="VBoxSensorUnit" layoutX="479.0" layoutY="10.0" prefHeight="350.0" prefWidth="108.0">
+                  <Pane prefHeight="3.0" prefWidth="200.0" />
+                  <Label id="LblCoolantTemperatureUnit" text="Celsius" />
+                  <Pane prefHeight="6.0" prefWidth="200.0" />
+                  <Label id="LblCoolantLevelUnit" text="Hectoliters" />
+                  <Pane layoutX="10.0" layoutY="31.0" prefHeight="6.0" prefWidth="200.0" />
+                  <Label id="LblUnit" text="Celsius" />
+                  <Pane layoutX="10.0" layoutY="141.0" prefHeight="6.0" prefWidth="200.0" />
+                  <Label id="LblUnit" text="Megawatt-hour" />
+                  <Pane layoutX="10.0" layoutY="147.0" prefHeight="6.0" prefWidth="200.0" />
+                  <Label id="LblUnit" prefHeight="17.0" prefWidth="89.0" text="Kilopascal" />
+                  <Pane layoutX="10.0" layoutY="101.0" prefHeight="6.0" prefWidth="200.0" />
+                  <Label id="LblUnit" prefHeight="17.0" prefWidth="91.0" text="Millisievert" />
+                  <Pane layoutX="10.0" layoutY="124.0" prefHeight="6.0" prefWidth="200.0" />
+                  <Label id="LblUnit" text="Percent" />
+               </VBox>
+            </HBox>
+         </VBox>
+   <ImageView fx:id="imageViewAIImage" fitHeight="300" fitWidth="300" layoutX="450" layoutY="350" />
+   <ToggleButton fx:id="pause" layoutX="768.0" layoutY="285.0" mnemonicParsing="false" selected="true" text="Pause" />
+   <Label fx:id="state" layoutX="729.0" layoutY="230.0" prefHeight="48.0" prefWidth="125.0" text="Reactor Sate: unknown" textAlignment="CENTER" wrapText="true" />
+   </Pane>

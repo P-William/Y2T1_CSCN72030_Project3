@@ -1,3 +1,53 @@
-.button {
-    -fx-text-fill: blue;
+/* Default/Resume state (not selected) */
+.toggle-button {
+    -fx-background-color: #D3D3D3; /* Background color */
+    -fx-border-color: #4B4B4B;   /* Border color */
+    -fx-border-width: 1;          /* Border thickness */
+    -fx-border-radius: 5;         /* Rounded corners */
 }
+
+/* Selected/Pause state */
+.toggle-button:selected {
+    -fx-background-color: #D3D3D3; /* Background color */
+    -fx-border-color: #4B4B4B;   /* Border color */
+    -fx-border-width: 1;          /* Border thickness */
+    -fx-border-radius: 5;         /* Rounded corners */
+}
+
+.pane {
+    -fx-background-color: #edfcff; /* Background color */
+}
+
+.label {
+    -fx-text-fill: #4B4B4B;   /* Text color */
+    -fx-font-family: Monaco, Arial, monospace;
+}
+
+.slider .track {
+    -fx-background-color: #14DAFE; /* Track color: bright blue */
+    -fx-effect:  innershadow(gaussian, #1177A9, 6, 0.6, 0, 0), /* Middle gradient */
+                 innershadow(gaussian, #14DAFE, 3, 0.4, 0, 0); /* Inner lighter gradient */
+    -fx-background-radius: 5; /* Rounded corners for the track */
+    -fx-pref-height: 6; /* Height of the track */
+}
+
+.slider .thumb {
+    -fx-background-color: #D3D3D3; /* Light grey fill */
+    -fx-border-color: #4B4B4B; /* Dark grey outline */
+    -fx-border-width: 1; /* Thickness of the outline */
+    -fx-border-radius: 10; /* Rounded border */
+    -fx-background-radius: 10; /* Rounded background */
+    -fx-pref-width: 14; /* Width of the thumb */
+    -fx-pref-height: 14; /* Height of the thumb */
+    -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0); /* Remove any shadow */
+}
+
+.slider .tick-mark {
+    -fx-stroke: #bababa; /* Tick mark color */
+}
+
+.slider .tick-label {
+    -fx-text-fill: #4B4B4B; /* Tick label color */
+}
+
+

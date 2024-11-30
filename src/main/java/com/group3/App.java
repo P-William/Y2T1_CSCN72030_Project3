@@ -4,9 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * JavaFX App
@@ -17,8 +19,17 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"));
+        scene = new Scene(loadFXML("app"));
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+
+
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Closing Reactor");
+        });
+
+        stage.setResizable(false);
+        stage.setTitle("Nuclear Reactor Simulator");
+        stage.getIcons().add(new Image(getClass().getResource("icon.png").toExternalForm()));
         stage.setScene(scene);
         stage.show();
     }

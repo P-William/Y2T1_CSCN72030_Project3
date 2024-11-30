@@ -12,3 +12,16 @@ target/
 
 ### VS Code ###
 .vscode/
+
+
+
+
+operator_logs.txt
+/Cont.dat
+/controls.dat
+/Controls.txt
+/Controls1.dat
+/testfile1.txt
+/testfile2.txt
+/testfile3.txt
+/sensors.dat
