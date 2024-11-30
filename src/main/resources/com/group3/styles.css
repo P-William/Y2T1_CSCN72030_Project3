@@ -20,6 +20,7 @@
 
 .label {
     -fx-text-fill: #4B4B4B;   /* Text color */
+    -fx-font-family: Monaco, Arial, monospace;
 }
 
 .slider .track {
