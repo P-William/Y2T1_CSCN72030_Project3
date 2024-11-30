@@ -27,6 +27,7 @@ public class App extends Application {
             System.out.println("Closing Reactor");
         });
 
+        stage.setResizable(false);
         stage.setTitle("Nuclear Reactor Simulator");
         stage.getIcons().add(new Image(getClass().getResource("icon.png").toExternalForm()));
         stage.setScene(scene);

@@ -14,15 +14,13 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.collections.FXCollections;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import lombok.NonNull;
-import javafx.scene.control.Label;
 
 public class PrimaryController {
 
@@ -82,11 +80,28 @@ public class PrimaryController {
 
     @FXML
     private ToggleButton pause;
+    private Image pauseImage;
+    private Image resumeImage;
 
     @FXML
     private void initialize() {
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("reactor_image.png")));
         imageViewAIImage.setImage(image);
+        // Set the button size
+        pause.setMinSize(32, 32);  // Minimum size
+        pause.setPrefSize(32, 32); // Preferred size
+        pause.setMaxSize(32, 32);  // Maximum size
+        pauseImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("pause.png")));
+        resumeImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("resume.png")));
+        ImageView imageView = new ImageView(pauseImage);
+        imageView.setFitWidth(16); // Set image width
+        imageView.setFitHeight(16); // Set image height
+        pause.setGraphic(imageView);
+
+        // Center the image in the button
+        pause.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        pause.setAlignment(Pos.CENTER); // Center the graphic within the button
+
         logs = new Logs("logs.txt");
         simulator = new Simulator();
         controls = new ArrayList<>();
@@ -141,11 +156,18 @@ public class PrimaryController {
             if (newValue) {
                 System.out.println("Resuming Reactor");
                 timeline.play();
-                pause.setText("Pause");
+                ImageView newImageView = new ImageView(pauseImage);
+                newImageView.setFitWidth(16); // Set image width
+                newImageView.setFitHeight(16); // Set image height
+                pause.setGraphic(newImageView);
+
             } else {
                 System.out.println("Pausing Reactor");
                 timeline.pause();
-                pause.setText("Resume");
+                ImageView newImageView = new ImageView(resumeImage);
+                newImageView.setFitWidth(16); // Set image width
+                newImageView.setFitHeight(16); // Set image height
+                pause.setGraphic(newImageView);
             }
         });
     }
@@ -153,20 +175,20 @@ public class PrimaryController {
     private void SimulateReactor() throws IOException {
         double increment = 1d;
         coolantValve.setTargetValue(coolantValveGui.getValue());
-        LblCoolantValveTargetValue.setText(Double.toString(coolantValve.getTargetValue()));
-        LblCoolantValveCurrentValue.setText(Double.toString(coolantValve.getCurrentValue()));
+        LblCoolantValveTargetValue.setText(Double.toString(coolantValve.getTargetValue()) + " " + coolantValve.getUnit());
+        LblCoolantValveCurrentValue.setText(Double.toString(coolantValve.getCurrentValue()) + " " + coolantValve.getUnit());
         coolantPump.setTargetValue(coolantPumpGui.getValue());
-        LblCoolantPumpTargetValue.setText(Double.toString(coolantPump.getTargetValue()));
-        LblCoolantPumpCurrentValue.setText(Double.toString(coolantPump.getCurrentValue()));
+        LblCoolantPumpTargetValue.setText(Double.toString(coolantPump.getTargetValue()) + " " + coolantPump.getUnit());
+        LblCoolantPumpCurrentValue.setText(Double.toString(coolantPump.getCurrentValue()) + " " + coolantPump.getUnit());
         controlRods.setTargetValue(controlRodGui.getValue());
-        LblControlRodsTargetValue.setText(Double.toString(controlRods.getTargetValue()));
-        LblControlRodsCurrentValue.setText(Double.toString(controlRods.getCurrentValue()));
+        LblControlRodsTargetValue.setText(Double.toString(controlRods.getTargetValue()) + " " + controlRods.getUnit());
+        LblControlRodsCurrentValue.setText(Double.toString(controlRods.getCurrentValue()) + " " + controlRods.getUnit());
         steamRate.setTargetValue(steamLevelGui.getValue());
-        LblSteamOutputTargetValue.setText(Double.toString(steamRate.getTargetValue()));
-        LblSteamOutputCurrentValue.setText(Double.toString(steamRate.getCurrentValue()));
+        LblSteamOutputTargetValue.setText(Double.toString(steamRate.getTargetValue()) + " " + steamRate.getUnit());
+        LblSteamOutputCurrentValue.setText(Double.toString(steamRate.getCurrentValue()) + " " + steamRate.getUnit());
         corePressureBlowOff.setTargetValue(pressureValveGui.getValue());
-        LblPressureValveTargetValue.setText(Double.toString(corePressureBlowOff.getTargetValue()));
-        LblPressureValveCurrentValue.setText(Double.toString(corePressureBlowOff.getCurrentValue()));
+        LblPressureValveTargetValue.setText(Double.toString(corePressureBlowOff.getTargetValue()) + " " + corePressureBlowOff.getUnit());
+        LblPressureValveCurrentValue.setText(Double.toString(corePressureBlowOff.getCurrentValue()) + " " + corePressureBlowOff.getUnit());
 
         for(ControlDevice controlDevice : controls) {
 
