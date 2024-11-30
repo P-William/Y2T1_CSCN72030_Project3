@@ -63,7 +63,6 @@ public void UpdateSimulator() {
     controls.add(controlRods);
     controls.add(steamRate);
     controls.add(corePressureBlowOff);
-
     controls = controlIO.readControlData(controls);
 
     coolantPump.setCurrentValue(controls.get(0).getCurrentValue());

@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="862.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group3.PrimaryController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="862.0" styleClass="pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group3.PrimaryController">
          <VBox alignment="CENTER" layoutX="14.0" layoutY="6.0" prefHeight="583.0" prefWidth="681.0">
             <HBox id="HBoxControlDevices" prefHeight="248.0" prefWidth="682.0">
                <VBox id="VBoxCoolantPump" layoutX="115.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
@@ -92,7 +92,8 @@
                </VBox>
             </HBox>
          </VBox>
-   <ImageView fx:id="imageViewAIImage" fitHeight="300" fitWidth="300" layoutX="450" layoutY="350" />
-   <ToggleButton fx:id="pause" layoutX="768.0" layoutY="285.0" mnemonicParsing="false" selected="true" text="Pause" />
+   <ImageView fx:id="imageViewAIImage" fitHeight="300" fitWidth="300" layoutX="450" layoutY="325" />
+   <ToggleButton fx:id="pause" layoutX="700.0" layoutY="285.0" mnemonicParsing="false" selected="true" text="Pause" />
+   <ToggleButton fx:id="mode" layoutX="750.0" layoutY="285.0" mnemonicParsing="false" text="Manual Mode" />
    <Label fx:id="state" layoutX="729.0" layoutY="230.0" prefHeight="48.0" prefWidth="125.0" text="Reactor Sate: unknown" textAlignment="CENTER" wrapText="true" />
    </Pane>

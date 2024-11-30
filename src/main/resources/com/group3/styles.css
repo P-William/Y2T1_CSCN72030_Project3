@@ -15,12 +15,12 @@
 }
 
 .pane {
-    -fx-background-color: #edfcff; /* Background color */
+    -fx-background-color: #EBEFF0; /* Background color */
 }
 
 .label {
     -fx-text-fill: #4B4B4B;   /* Text color */
-    -fx-font-family: Monaco, Arial, monospace;
+    -fx-font-family: Monaco, Arial, monospace; /* Font family */
 }
 
 .slider .track {
@@ -48,6 +48,7 @@
 
 .slider .tick-label {
     -fx-text-fill: #4B4B4B; /* Tick label color */
+    -fx-font-family: Monaco, Arial, monospace; /* Font family */
 }
 
 
