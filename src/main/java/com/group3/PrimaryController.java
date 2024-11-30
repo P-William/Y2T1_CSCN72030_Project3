@@ -126,7 +126,7 @@ public class PrimaryController {
         });
 
        //this is the thread that is run every 0.25 seconds
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             try {
                 SimulateReactor();
                 state.setText("Reactor Sate: "+String.valueOf(simulator.reactorState).toLowerCase());

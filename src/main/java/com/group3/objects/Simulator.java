@@ -1,11 +1,15 @@
 package com.group3.objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ToString
+@Getter
+@Setter
 public class Simulator {
 private Sensor coolantTemp;
 private Sensor coolantLevel;
@@ -25,7 +29,7 @@ public controlIO controlIO;
 public sensorIO sensorIO;
 
 public ReactorState reactorState;
-private boolean reactorMode;
+public boolean reactorMode;
 
 public Simulator() {
     coolantTemp = new Sensor("Coolant Temperature", 50d, 10d, 350d, "Celsius");
@@ -71,7 +75,7 @@ public void UpdateSimulator() {
     HandleControlInput();
 
     reactorState =  CheckReactorState();
-    if (reactorMode && reactorState == ReactorState.CRITICAL) {
+    if (reactorMode && reactorState == ReactorState.MELTDOWN) {
         PreventMeltdown();
     }
 
@@ -86,7 +90,7 @@ public void UpdateSimulator() {
     sensorIO.writeSensorData(sensors);
 }
 
-private void HandleControlInput() {
+public void HandleControlInput() {
 
     UpdateHeat(UpdateControlRods(), UpdateCoolant(), UpdateSteamRate());
 
@@ -106,7 +110,7 @@ public ReactorState CheckReactorState(){
     return reactorState;
 }
 
-private void PreventMeltdown(){//this is just to make it work for now
+public void PreventMeltdown(){//this is just to make it work for now
     coolantTemp = new Sensor("Coolant Temperature", 50d, 10d, 350d, "Celsius");
     coolantLevel = new Sensor("Coolant Level", 200d, 0d, 350d, "Hectoliters");
     coreTemp = new Sensor("Core Temperature", 300d, 0d, 1500d, "Celsius");
@@ -116,23 +120,26 @@ private void PreventMeltdown(){//this is just to make it work for now
     controlRodPosition = new Sensor("Control Rod Position", 75d, 0d, 100d, "Percent");
 }
 
-private void UpdateHeat(double heatGenerated, double heatRemovedByCoolant, double heatRemovedBySteam){
+public void UpdateHeat(double heatGenerated, double heatRemovedByCoolant, double heatRemovedBySteam){
 
     double netHeatChange = heatGenerated - heatRemovedByCoolant - heatRemovedBySteam;
 
-    coreTemp.setValue(Math.max((coreTemp.getValue() + netHeatChange), coreTemp.getMinValue()));
+    coreTemp.setValue(Math.max(Math.min(coreTemp.getValue() + netHeatChange, coreTemp.getMaxValue()), coreTemp.getMinValue()));
+    radiationLevel.setValue(coreTemp.getValue() / 14);
+    coolantTemp.setValue(Math.min(coolantTemp.getValue() + heatGenerated * 0.4, coolantTemp.getMaxValue()));
 }
 
-private double UpdateCoolant(){
+public double UpdateCoolant(){
     double coolantRemovalFactor = 15d;
 
 if (coolantLevel.getValue() < coolantLevel.getMaxValue()) {
     double addedCoolant;
 
     //add to coolant using pump rate and flow rate percentages
-    addedCoolant = (coolantLevel.getMaxValue() * ((coolantPump.getCurrentValue() / 100)) * (coolantValve.getCurrentValue() / 100));
+    addedCoolant = ((coolantLevel.getMaxValue() * ((coolantPump.getCurrentValue() / 100)) * (coolantValve.getCurrentValue() / 100)) * 0.7);
+    coolantTemp.setValue(coolantTemp.getValue() - (addedCoolant * 0.05));
     //either set the coolant value to be the maximum or whatever the calculated value is (should prevent coolant level being over max)
-    coolantLevel.setValue(Math.min((addedCoolant + coolantLevel.getValue()), coolantLevel.getMaxValue() - 1));
+    coolantLevel.setValue(Math.min((addedCoolant + coolantLevel.getValue()), coolantLevel.getMaxValue()));
 }
     double coolantEfficiency = (coolantLevel.getValue() / coolantLevel.getMaxValue()) *
             (coolantPump.getCurrentValue() / 100) *
@@ -141,23 +148,23 @@ if (coolantLevel.getValue() < coolantLevel.getMaxValue()) {
     return coolantEfficiency * coolantRemovalFactor;
 }
 
-private double UpdateControlRods(){
+public double UpdateControlRods(){
     double reactivity = 120f;
     // controlRodPosition is proportionate to controlRods so auto apply new value
     controlRodPosition.setValue(controlRods.getCurrentValue());
 
     //before coolant reductions core temp is directly controlled by control rods
     //core temp ranges 0 to 1200 or 12 times the 0 to 100 scale of the control rods
-    return ((controlRodPosition.getValue() / 100 )* reactivity);
+    return reactivity * (1 - (controlRodPosition.getValue() / 100));
 }
 
-private double UpdateSteamRate(){
+public double UpdateSteamRate(){
     double deductedSteam = 0;
     double initialCoolant = coolantLevel.getValue();
-    double steamHeatRemovalFactor = 1d;
+    double steamHeatRemovalFactor = 0.8d;
 
     //100 is temp because pressure shenanigans
-    if (coreTemp.getValue() > 100d){
+    if (coreTemp.getValue() > 100d && corePressure.getValue() > 1000){
 
         //deduct coolant level by the percentage of steam flow rate?
         deductedSteam = coolantLevel.getValue() * (steamRate.getCurrentValue() / 100);
@@ -166,31 +173,33 @@ private double UpdateSteamRate(){
 
         //if the resulting coolant is above 0 then power is equivalent to the steam deducted
         if (coolantLevel.getValue() > coolantLevel.getMinValue()){
-            powerOutput.setValue(deductedSteam);
-            // for every hectoliter of coolant removed add 4 degrees to core temp
+            powerOutput.setValue(deductedSteam * 2);
+            // for every hecto liter of coolant removed add 4 degrees to core temp
+            coolantTemp.setValue(Math.max(coolantTemp.getValue() - (deductedSteam * 0.3), coolantTemp.getMinValue()));
             return deductedSteam * steamHeatRemovalFactor;
 
         } else {//otherwise we only deducted what was already there
-            powerOutput.setValue(initialCoolant);
+            powerOutput.setValue(initialCoolant * 2);
+            coolantTemp.setValue(Math.max(coolantTemp.getValue() - (initialCoolant * 0.3), coolantTemp.getMinValue()));
             return initialCoolant * steamHeatRemovalFactor;
         }
     }
     else {
         System.out.println("Reactor not hot enough for steam");
-        powerOutput.setValue(1d);
+        powerOutput.setValue(0d);
         return 0;
     }
 }
 
-private void UpdatePressure(){
+public void UpdatePressure(){
     // Pressure increases with temperature
-    double temperatureEffect = coreTemp.getValue() * 0.2;
+    double temperatureEffect = coreTemp.getValue() * 0.4;
 
     // Pressure increases inversely with coolant level
     double coolantEffect = (coolantPump.getCurrentValue()/ 100) * (coolantValve.getCurrentValue() / 100) * 2;
 
     // Pressure decreases with steam rate
-    double steamEffect = steamRate.getCurrentValue() * 3;
+    double steamEffect = steamRate.getCurrentValue() * 0.8;
 
     // Total pressure change
     double newPressure = temperatureEffect + coolantEffect - steamEffect;
@@ -199,7 +208,7 @@ private void UpdatePressure(){
 
     if (corePressureBlowOff.getCurrentValue() > 0){
         //might need to switch to subtract from max value so we are subtracting what percent we want from the max
-        corePressure.setValue(corePressure.getValue() - (corePressure.getValue() * (corePressureBlowOff.getCurrentValue() / 100)));
+        corePressure.setValue(corePressure.getValue() - (corePressure.getValue() * (corePressureBlowOff.getCurrentValue() / 100) * 0.4));
     }
 }
 
