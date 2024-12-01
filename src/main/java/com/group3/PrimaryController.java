@@ -89,7 +89,11 @@ public class PrimaryController {
     private ListView<String> sensorList;
 
     ObservableList<String> sensorData;
+
+
+
     private Logs logs;
+    private List<Double> prevTargetValues = new ArrayList<>();
 
     @FXML
     private ToggleButton pause;
@@ -130,7 +134,7 @@ public class PrimaryController {
         pause.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         pause.setAlignment(Pos.CENTER); // Center the graphic within the button
 
-        logs = new Logs("logs.txt");
+        logs = new Logs();
         simulator = new Simulator();
         controls = new ArrayList<>();
         sensors = new ArrayList<>();
@@ -142,6 +146,11 @@ public class PrimaryController {
         controls.add(controlRods);
         controls.add(steamRate);
         controls.add(corePressureBlowOff);
+
+        for(ControlDevice controlDevice : controls) {
+            prevTargetValues.add(controlDevice.getTargetValue());
+        }
+
 
         coolantValveGui.setValue(simulator.coolantValve.getCurrentValue());
         coolantValveGui.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -172,6 +181,7 @@ public class PrimaryController {
         timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             try {
                 SimulateReactor();
+                logData();
                 if (simulator.reactorState == ReactorState.STABLE) {
                     criticalDialogShown = false;
                     state.setText("Reactor Sate: Stable");
@@ -289,21 +299,27 @@ public class PrimaryController {
         simulator.UpdateSimulator();
         sensors = simulator.sensorIO.readSensorData();
 
-        List<String> sensorData = new ArrayList<>();
-
-        for(Sensor sensor : sensors) {
-            sensorData.add(sensor.toString());
-        }
-
-        for(ControlDevice controlDevice : controls) {
-            logs.logOperatorAction(controlDevice.toString(), sensorData);
-        }
-
         Platform.runLater(() -> {
 
         });
 
         setList(sensors);
+    }
+
+    public void logData()
+    {
+        for(Sensor sensor : sensors) {
+            sensorData.add(sensor.toString());
+        }
+
+        for(int i = 0; i < controls.size(); i++) {
+            if(controls.get(i).getTargetValue() != prevTargetValues.get(i)) {
+                logs.logControl(controls.get(i));
+                prevTargetValues.set(i, controls.get(i).getTargetValue());
+            }
+        }
+
+        logs.logAllSensors(sensors);
     }
 
     @FXML
