@@ -14,45 +14,38 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 
 public class Logs {
-
     private String logFilePath;
-    private List<LogEntry> logEntries;
 
-    public Logs(String logFilePath) {
-        this.logFilePath = logFilePath;
-        this.logEntries = new ArrayList<>();
+    public Logs() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+        LocalDateTime timestamp = LocalDateTime.now();
+        this.logFilePath = timestamp.format(formatter) + "_logs.txt";
     }
 
-    private record LogEntry(String actionType, LocalDateTime timestamp, List<String> sensorData) {
+    public void logControl(ControlDevice controlDevice) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime timestamp = LocalDateTime.now();
+        String entry = timestamp.format(formatter) + " Control Device Name: " + controlDevice.getDeviceName() + " Control Device Target Value and Unit: " + controlDevice.getTargetValue() + " " + controlDevice.getUnit() + " Control Device Current Value and Unit: " + controlDevice.getCurrentValue() + " " + controlDevice.getUnit();
+        writeLogToFile(entry);
 
-        @Override
-        public String toString() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedActionType = (actionType == null || actionType.isEmpty()) ? "N/A" : actionType;
-            String formattedSensorData = (sensorData == null || sensorData.isEmpty()) ? "N/A" : String.join(", ", sensorData);
-            return timestamp.format(formatter) + " | System Action: " + formattedActionType + " | Sensor Data: " + formattedSensorData;
+    }
+
+    public void logAllSensors(List<Sensor> sensors) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime timestamp = LocalDateTime.now();
+        for (Sensor sensor : sensors) {
+            String entry = timestamp.format(formatter) + " Sensor Name: " + sensor.getName() + " Sensor Value and Unit: " + sensor.getValue() + " " + sensor.getUnit();
+            writeLogToFile(entry);
         }
     }
 
-    public void logOperatorAction(String actionType, List<String> sensorData) {
-
-        LocalDateTime timestamp = LocalDateTime.now();
-        List<String> newSensorData = (sensorData == null) ? new ArrayList<>() : sensorData;
-        LogEntry newEntry = new LogEntry(actionType, timestamp, newSensorData);
-
-        logEntries.add(newEntry);
-        writeLogToFile(newEntry);
-
-    }
-
-    private void writeLogToFile(LogEntry entry) {
+    private void writeLogToFile(String entry) {
 
         try (BufferedWriter writeToFile = new BufferedWriter(new FileWriter(logFilePath, true))) {
 
-            writeToFile.write(entry.toString());
+            writeToFile.write(entry);
             writeToFile.newLine();
 
         } catch (IOException e) {
@@ -60,32 +53,6 @@ public class Logs {
         }
 
     }
-
-    public List<String> getLogEntries() {
-        return logEntries.stream()
-            .map(LogEntry::toString)
-            .toList();
-    }
-
-    public void closeLogs() {
-        logEntries.clear(); // clear memory
-        System.out.println("Logs saved to file, system closing......");
-    }
-
-    /*public static void main(String[] args) {
-        Logs operatorLogs = new Logs("operator_logs.txt");
-
-        List<String> sensorData1 = List.of("Temperature: 300°C", "Pressure: 1000 psi", "Coolant Flow: 45%", "Radiation Level: Low");
-        operatorLogs.logOperatorAction("Startup", sensorData1);
-
-        // Print all logs to console for verification
-        List<String> allLogs = operatorLogs.getLogEntries();
-        allLogs.forEach(System.out::println);
-
-        // Close the logger to clear resources
-        operatorLogs.closeLogs();
-    }*/
-
 
 }
 
