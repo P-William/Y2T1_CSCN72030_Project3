@@ -33,7 +33,7 @@ public class sensorIO {
        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(sensorFilePath))) {
 
            oos.writeObject(sensorData);
-           System.out.println("Sensors successfully saved to " + sensorFilePath);
+//           System.out.println("Sensors successfully saved to " + sensorFilePath);
 
        } catch (IOException e) {
 

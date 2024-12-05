@@ -5,10 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SimulatorTest {
     Simulator sim;
@@ -56,7 +54,7 @@ class SimulatorTest {
 
         sim.controlIO.writeControlData(controls);
         sim.controlIO.readControlData(controls);
-        sim.UpdateSimulator();
+        sim.updateSimulator();
 
         assertThat(sim.getCoolantTemp().getValue()).isBetween(10d, 350d);
         assertThat(sim.getCoolantLevel().getValue()).isBetween(0d, 350d);
@@ -75,10 +73,10 @@ class SimulatorTest {
         sim.coolantValve.setCurrentValue(0d);
 
         for(int i = 0; i < 10; i++){
-            sim.HandleControlInput();
+            sim.handleControlInput();
         }
-        sim.PreventMeltdown();
-        sim.reactorState = sim.CheckReactorState();
+        sim.resetToStable();
+        sim.reactorState = sim.checkReactorState();
 
         assertThat(sim.reactorState).isNotEqualTo(ReactorState.MELTDOWN);
     }
@@ -86,7 +84,7 @@ class SimulatorTest {
     void checkState(){
         sim.setCoreTemp(new Sensor("Core Temperature", 1200d, 0d, 12000d, "Celsius"));
 
-        sim.CheckReactorState();
+        sim.checkReactorState();
 
         assertThat(sim.reactorState).isEqualTo(ReactorState.MELTDOWN);
     }
@@ -94,13 +92,13 @@ class SimulatorTest {
     void testUpdateSteamRateMin(){
         sim.steamRate.setCurrentValue(0);
 
-        assertThat(sim.UpdateSteamRate()).isBetween(0d, 2000d);
+        assertThat(sim.updateSteamRate()).isBetween(0d, 2000d);
     }
     @Test
     void testUpdateSteamRateMax(){
         sim.steamRate.setCurrentValue(100);
 
-        assertThat(sim.UpdateSteamRate()).isBetween(0d, 2000d);
+        assertThat(sim.updateSteamRate()).isBetween(0d, 2000d);
     }
     @Test
     void testUpdateCoolantMin(){
@@ -120,13 +118,13 @@ class SimulatorTest {
     void testUpdateControlRodsMin(){
         sim.controlRods.setCurrentValue(0);
 
-        assertThat(sim.UpdateControlRods()).isEqualTo(120);
+        assertThat(sim.updateControlRods()).isEqualTo(120);
     }
     @Test
     void testUpdateControlRodsMax(){
         sim.controlRods.setCurrentValue(100);
 
-        assertThat(sim.UpdateControlRods()).isEqualTo(0);
+        assertThat(sim.updateControlRods()).isEqualTo(0);
     }
     @Test
     void testUpdatePressureMin(){
@@ -136,7 +134,7 @@ class SimulatorTest {
         sim.coolantValve.setCurrentValue(0);
         sim.coolantPump.setCurrentValue(0);
         for (int i = 0; i < 15; i++) {
-            sim.UpdatePressure();
+            sim.updatePressure();
         }
         assertThat(sim.getCorePressure().getValue()).isEqualTo(0);
     }
@@ -148,7 +146,7 @@ class SimulatorTest {
         sim.coolantValve.setCurrentValue(100);
         sim.coolantPump.setCurrentValue(100);
         for (int i = 0; i < 15; i++) {
-            sim.UpdatePressure();
+            sim.updatePressure();
         }
         assertThat(sim.getCorePressure().getValue()).isEqualTo(5000);
     }

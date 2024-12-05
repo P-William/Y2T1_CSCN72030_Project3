@@ -1,6 +1,5 @@
-package com.group3;
+package com.group3.objects;
 
-import com.group3.objects.ControlDevice;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

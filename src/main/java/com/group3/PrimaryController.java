@@ -26,15 +26,22 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ButtonBar;
 import java.util.Optional;
+import javafx.beans.property.adapter.JavaBeanDoubleProperty;
+import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 
 public class PrimaryController {
 
 
-    private ControlDevice coolantValve = new ControlDevice("Coolant Valve", 0d, 100d, 50d, "Percent");
-    private ControlDevice coolantPump = new ControlDevice("Coolant Pump", 0d, 100d, 50d, "Percent");
-    private ControlDevice controlRods = new ControlDevice("Control Rods", 0d, 100d, 75d, "Percent");
-    private ControlDevice steamRate = new ControlDevice("Steam Rate", 0d, 100d, 10d, "Percent");
-    private ControlDevice corePressureBlowOff = new ControlDevice("Core Pressure Blow Off Valve", 0d, 100d, 0d, "Percent");
+//    private ControlDevice coolantValve = new ControlDevice("Coolant Valve", 0d, 100d, 50d, "Percent");
+//    private ControlDevice coolantPump = new ControlDevice("Coolant Pump", 0d, 100d, 50d, "Percent");
+//    private ControlDevice controlRods = new ControlDevice("Control Rods", 0d, 100d, 75d, "Percent");
+//    private ControlDevice steamRate = new ControlDevice("Steam Rate", 0d, 100d, 10d, "Percent");
+//    private ControlDevice corePressureBlowOff = new ControlDevice("Core Pressure Blow Off Valve", 0d, 100d, 0d, "Percent");
+//    private ControlDevice coolantValve = new ControlDevice("Coolant Valve", 0d, 100d, 0d, "Percent");
+//    private ControlDevice coolantPump = new ControlDevice("Coolant Pump", 0d, 100d, 0d, "Percent");
+//    private ControlDevice controlRods = new ControlDevice("Control Rods", 0d, 100d, 0d, "Percent");
+//    private ControlDevice steamRate = new ControlDevice("Steam Rate", 0d, 100d, 100d, "Percent");
+//    private ControlDevice corePressureBlowOff = new ControlDevice("Core Pressure Blow Off Valve", 0d, 100d, 100d, "Percent");
 
     private List<ControlDevice> controls;
     private List<Sensor> sensors;
@@ -53,30 +60,35 @@ public class PrimaryController {
 
     @FXML
     private Slider coolantValveGui;
+    private JavaBeanDoubleProperty coolantValveTargetValueProperty;
     @FXML
     private Label LblCoolantValveTargetValue;
     @FXML
     private Label LblCoolantValveCurrentValue;
     @FXML
     private Slider coolantPumpGui;
+    private JavaBeanDoubleProperty coolantPumpTargetValueProperty;
     @FXML
     private Label LblCoolantPumpTargetValue;
     @FXML
     private Label LblCoolantPumpCurrentValue;
     @FXML
     private Slider controlRodGui;
+    private JavaBeanDoubleProperty controlRodsTargetValueProperty;
     @FXML
     private Label LblControlRodsTargetValue;
     @FXML
     private Label LblControlRodsCurrentValue;
     @FXML
     private Slider steamLevelGui;
+    private JavaBeanDoubleProperty steamRateTargetValueProperty;
     @FXML
     private Label LblSteamOutputTargetValue;
     @FXML
     private Label LblSteamOutputCurrentValue;
     @FXML
     public Slider pressureValveGui;
+    private JavaBeanDoubleProperty corePressureBlowOffTargetValueProperty;
     @FXML
     private Label LblPressureValveTargetValue;
     @FXML
@@ -141,41 +153,58 @@ public class PrimaryController {
         sensorData = FXCollections.observableArrayList();
         sensorList.setItems(sensorData);
 
-        controls.add(coolantValve);
-        controls.add(coolantPump);
-        controls.add(controlRods);
-        controls.add(steamRate);
-        controls.add(corePressureBlowOff);
+        controls.add(simulator.getCoolantValve());
+        controls.add(simulator.getCoolantPump());
+        controls.add(simulator.getControlRods());
+        controls.add(simulator.getSteamRate());
+        controls.add(simulator.getCorePressureBlowOff());
 
         for(ControlDevice controlDevice : controls) {
             prevTargetValues.add(controlDevice.getTargetValue());
         }
 
+        try {
+            coolantValveTargetValueProperty = JavaBeanDoublePropertyBuilder.create()
+                    .bean(simulator.getCoolantValve())
+                    .name("targetValue")
+                    .build();
 
-        coolantValveGui.setValue(simulator.coolantValve.getCurrentValue());
-        coolantValveGui.valueProperty().addListener((observable, oldValue, newValue) -> {
-            coolantValveGui.setValue(Math.round(newValue.doubleValue()));
-        });
+            coolantPumpTargetValueProperty = JavaBeanDoublePropertyBuilder.create()
+                    .bean(simulator.getCoolantPump())
+                    .name("targetValue")
+                    .build();
 
-        coolantPumpGui.setValue(simulator.coolantPump.getCurrentValue());
-        coolantPumpGui.valueProperty().addListener((observable, oldValue, newValue) -> {
-            coolantPumpGui.setValue(Math.round(newValue.doubleValue()));
-        });
+            controlRodsTargetValueProperty = JavaBeanDoublePropertyBuilder.create()
+                    .bean(simulator.getControlRods())
+                    .name("targetValue")
+                    .build();
 
-        controlRodGui.setValue(simulator.controlRods.getCurrentValue());
-        controlRodGui.valueProperty().addListener((observable, oldValue, newValue) -> {
-            controlRodGui.setValue(Math.round(newValue.doubleValue()));
-        });
+            steamRateTargetValueProperty = JavaBeanDoublePropertyBuilder.create()
+                    .bean(simulator.getSteamRate())
+                    .name("targetValue")
+                    .build();
 
-        steamLevelGui.setValue(simulator.steamRate.getCurrentValue());
-        steamLevelGui.valueProperty().addListener((observable, oldValue, newValue) -> {
-            steamLevelGui.setValue(Math.round(newValue.doubleValue()));
-        });
+            corePressureBlowOffTargetValueProperty = JavaBeanDoublePropertyBuilder.create()
+                    .bean(simulator.getCorePressureBlowOff())
+                    .name("targetValue")
+                    .build();
 
-        pressureValveGui.setValue(simulator.corePressureBlowOff.getCurrentValue());
-        pressureValveGui.valueProperty().addListener((observable, oldValue, newValue) -> {
-            pressureValveGui.setValue(Math.round(newValue.doubleValue()));
-        });
+        } catch (NoSuchMethodException e) {
+            System.out.println("error");
+        }
+
+        // Bind the slider's value to the JavaBean property
+        coolantValveGui.valueProperty().bindBidirectional(coolantValveTargetValueProperty);
+        coolantValveGui.setBlockIncrement(1);
+        coolantPumpGui.valueProperty().bindBidirectional(coolantPumpTargetValueProperty);
+        coolantPumpGui.setBlockIncrement(1);
+        controlRodGui.valueProperty().bindBidirectional(controlRodsTargetValueProperty);
+        controlRodGui.setBlockIncrement(1);
+        steamLevelGui.valueProperty().bindBidirectional(steamRateTargetValueProperty);
+        steamLevelGui.setBlockIncrement(1);
+        pressureValveGui.valueProperty().bindBidirectional(corePressureBlowOffTargetValueProperty);
+        pressureValveGui.setBlockIncrement(1);
+
 
        //this is the thread that is run every 0.25 seconds
         timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
@@ -273,22 +302,19 @@ public class PrimaryController {
 
     private void SimulateReactor() throws IOException {
         double increment = 1d;
-        simulator.setReactorMode(mode.isSelected());
-        coolantValve.setTargetValue(coolantValveGui.getValue());
-        LblCoolantValveTargetValue.setText(coolantValve.getTargetValue() + " " + coolantValve.getUnit());
-        LblCoolantValveCurrentValue.setText(coolantValve.getCurrentValue() + " " + coolantValve.getUnit());
-        coolantPump.setTargetValue(coolantPumpGui.getValue());
-        LblCoolantPumpTargetValue.setText(coolantPump.getTargetValue() + " " + coolantPump.getUnit());
-        LblCoolantPumpCurrentValue.setText(coolantPump.getCurrentValue() + " " + coolantPump.getUnit());
-        controlRods.setTargetValue(controlRodGui.getValue());
-        LblControlRodsTargetValue.setText(controlRods.getTargetValue() + " " + controlRods.getUnit());
-        LblControlRodsCurrentValue.setText(controlRods.getCurrentValue() + " " + controlRods.getUnit());
-        steamRate.setTargetValue(steamLevelGui.getValue());
-        LblSteamOutputTargetValue.setText(steamRate.getTargetValue() + " " + steamRate.getUnit());
-        LblSteamOutputCurrentValue.setText(steamRate.getCurrentValue() + " " + steamRate.getUnit());
-        corePressureBlowOff.setTargetValue(pressureValveGui.getValue());
-        LblPressureValveTargetValue.setText(corePressureBlowOff.getTargetValue() + " " + corePressureBlowOff.getUnit());
-        LblPressureValveCurrentValue.setText(corePressureBlowOff.getCurrentValue() + " " + corePressureBlowOff.getUnit());
+
+            LblCoolantValveTargetValue.setText(simulator.getCoolantValve().getTargetValue() + " " + simulator.getCoolantValve().getUnit());
+            LblCoolantValveCurrentValue.setText(simulator.getCoolantValve().getCurrentValue() + " " + simulator.getCoolantValve().getUnit());
+            LblCoolantPumpTargetValue.setText(simulator.getCoolantPump().getTargetValue() + " " + simulator.getCoolantPump().getUnit());
+            LblCoolantPumpCurrentValue.setText(simulator.getCoolantPump().getCurrentValue() + " " + simulator.getCoolantPump().getUnit());
+            LblControlRodsTargetValue.setText(simulator.getControlRods().getTargetValue() + " " + simulator.getControlRods().getUnit());
+            LblControlRodsCurrentValue.setText(simulator.getControlRods().getCurrentValue() + " " + simulator.getControlRods().getUnit());
+            LblSteamOutputTargetValue.setText(simulator.getSteamRate().getTargetValue() + " " + simulator.getSteamRate().getUnit());
+            LblSteamOutputCurrentValue.setText(simulator.getSteamRate().getCurrentValue() + " " + simulator.getSteamRate().getUnit());
+            LblPressureValveTargetValue.setText(simulator.getCorePressureBlowOff().getTargetValue() + " " + simulator.getCorePressureBlowOff().getUnit());
+            LblPressureValveCurrentValue.setText(simulator.getCorePressureBlowOff().getCurrentValue() + " " + simulator.getCorePressureBlowOff().getUnit());
+        simulator.setInAutoMode(mode.isSelected());
+
 
         for(ControlDevice controlDevice : controls) {
 
@@ -296,11 +322,14 @@ public class PrimaryController {
         }
 
         simulator.controlIO.writeControlData(controls);
-        simulator.UpdateSimulator();
+        simulator.updateSimulator();
+
+
+
         sensors = simulator.sensorIO.readSensorData();
 
         Platform.runLater(() -> {
-
+//            simulator.runAutoMode();
         });
 
         setList(sensors);
@@ -374,5 +403,4 @@ public class PrimaryController {
             }
         }
     }
-
 }

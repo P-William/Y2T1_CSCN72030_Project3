@@ -40,7 +40,7 @@ public class controlIO{
             try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(controlFilePath))) {
 
                 oos.writeObject(controls);
-                System.out.println("Control devices saved to file");
+//                System.out.println("Control devices saved to file");
 
             } catch (IOException e) {
 
