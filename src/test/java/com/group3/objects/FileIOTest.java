@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
-public class FileIOTest {
+public class FileIOTest { // tests done
 
     @Test
     void sensorIOInitializesCorrectlyFLR2() {
