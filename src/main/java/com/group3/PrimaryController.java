@@ -26,10 +26,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ButtonBar;
 import java.util.Optional;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class PrimaryController {
-
-
     private ControlDevice coolantValve = new ControlDevice("Coolant Valve", 0d, 100d, 50d, "Percent");
     private ControlDevice coolantPump = new ControlDevice("Coolant Pump", 0d, 100d, 50d, "Percent");
     private ControlDevice controlRods = new ControlDevice("Control Rods", 0d, 100d, 75d, "Percent");
@@ -45,6 +45,7 @@ public class PrimaryController {
 
     private boolean criticalDialogShown = false;
 
+    private MediaPlayer backgroundMusicPlayer;
 
     @FXML
     private Pane pane;
@@ -106,6 +107,8 @@ public class PrimaryController {
 
     @FXML
     private void initialize() {
+        initializeBackgroundMusic();
+
         // Create a shape to simulate the LED
         stateLightIndicator.setLayoutX(710); // Same X position
         stateLightIndicator.setLayoutY(255); // Same Y position
@@ -228,7 +231,11 @@ public class PrimaryController {
                     imageViewAIImage.setImage(imageReactorMeltdown);
                     stateLightIndicator.setFill(Color.web("#FF0000")); // Red LED color
                     glow.setColor(Color.web("#D30202")); // Glow color matching the LED
+
+                    // Play meltdown sound effect
+                    playMeltdownSound();
                 }
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -240,15 +247,22 @@ public class PrimaryController {
             if (newValue) {
                 System.out.println("Resuming Reactor");
                 timeline.play();
+                if (backgroundMusicPlayer.getStatus() == MediaPlayer.Status.PAUSED) {
+                    backgroundMusicPlayer.play(); // Resume the music
+                }
                 ImageView newImageView = new ImageView(pauseImage);
                 newImageView.setFitWidth(16); // Set image width
                 newImageView.setFitHeight(16); // Set image height
+
                 pause.setGraphic(newImageView);
                 changeIfSlidersAreEnabled(true);
 
             } else {
                 System.out.println("Pausing Reactor");
                 timeline.pause();
+                if (backgroundMusicPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                    backgroundMusicPlayer.pause(); // Pause the music
+                }
                 ImageView newImageView = new ImageView(resumeImage);
                 newImageView.setFitWidth(16); // Set image width
                 newImageView.setFitHeight(16); // Set image height
@@ -374,5 +388,29 @@ public class PrimaryController {
             }
         }
     }
+
+    private void initializeBackgroundMusic() {
+        try {
+            Media backgroundMusic = new Media(Objects.requireNonNull(getClass().getResource("background_music.wav")).toExternalForm());
+            backgroundMusicPlayer = new MediaPlayer(backgroundMusic);
+            backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Loop the music
+            backgroundMusicPlayer.setVolume(0.5); // Set volume (0.0 to 1.0)
+            backgroundMusicPlayer.play(); // Start playing
+        } catch (Exception e) {
+            System.err.println("Error loading background music: " + e.getMessage());
+        }
+    }
+
+    private void playMeltdownSound() {
+        try {
+            Media meltdownSound = new Media(Objects.requireNonNull(getClass().getResource("meltdown_sound.wav")).toExternalForm());
+            MediaPlayer meltdownPlayer = new MediaPlayer(meltdownSound);
+            meltdownPlayer.setVolume(1.0); // Full volume
+            meltdownPlayer.play(); // Play the sound
+        } catch (Exception e) {
+            System.err.println("Error playing meltdown sound: " + e.getMessage());
+        }
+    }
+
 
 }
