@@ -142,7 +142,6 @@ public class PrimaryController {
         controls = new ArrayList<>();
         sensors = new ArrayList<>();
         sensorData = FXCollections.observableArrayList();
-        sensorList.setItems(sensorData);
 
         controls.add(coolantValve);
         controls.add(coolantPump);
