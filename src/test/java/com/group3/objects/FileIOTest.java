@@ -1,36 +1,41 @@
 package com.group3.objects;
 
 import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
-public class FileIOTest {
+public class FileIOTest { // tests done
 
     @Test
-    void sensorIOInitializesCorrectly() {
+    void sensorIOInitializesCorrectlyFLR2() {
 
-        String filePath = "sensorTest.txt";
+        String filePath = "testSensors.txt";
 
         sensorIO sensorIO = new sensorIO(filePath);
 
         assertThat(sensorIO).isNotNull();
+
         assertThat(sensorIO.equals(filePath));
-    }
-
-    @Test
-    void logsInitializesCorrectly() {
-
-        String filePath = "testLogs.txt";
-
-        Logs operatorLogs = new Logs(filePath);
-
-        assertThat(operatorLogs.getLogEntries().isEmpty());
-        assertThat(operatorLogs.getLogFilePath()).isEqualTo(filePath);
 
     }
 
     @Test
-    void controlIOInitializesCorrectly() {
+    void logsInitializesCorrectlyFLR3() {
+
+        Logs logs = new Logs();
+
+        assertThat(logs).isNotNull();
+        assertThat(logs.getLogFilePath()).matches("\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}_logs.txt");
+
+    }
+
+    @Test
+    void controlIOInitializesCorrectlyFLR2() {
 
         String filePath = "controlTest.txt";
 
@@ -42,7 +47,7 @@ public class FileIOTest {
     }
 
     @Test
-    void verifySensorDataWriteAndRead() {
+    void verifySensorDataWriteAndReadFLR1FLR3() {
 
         String filePath = "sensorTest.txt";
         sensorIO sensorIO = new sensorIO(filePath);
@@ -58,7 +63,7 @@ public class FileIOTest {
     }
 
     @Test
-    void verifyControlDataWriteAndRead() {
+    void verifyControlDataWriteAndReadFLR1FLR3() {
 
         String filePath = "controlTest.txt";
         controlIO controlIO = new controlIO(filePath);
@@ -78,24 +83,32 @@ public class FileIOTest {
     }
 
     @Test
-    void verifyLogEntryFormat() {
+    void verifyLogEntryFormatFLR3() {
 
-        String filePath = "operatorTest.txt";
-        Logs operatorLogs = new Logs(filePath);
+       Logs logs = new Logs();
 
-        List<String> sensorData = List.of("\"Temperature: 300°C\", \"Pressure: 1000 psi\", \"Coolant Flow: 45%\", \"Radiation Level: Low\"");
+       ControlDevice controlDevice = new ControlDevice("Pump", 0.0, 100,"Litres");
 
-        operatorLogs.logOperatorAction("Startup", sensorData);
-        List<String> logEntries = operatorLogs.getLogEntries();
+       logs.logControl(controlDevice);
 
-        assertThat(logEntries).isNotEmpty();
-        String logEntry = logEntries.get(0);
+       File logFile = new File(logs.getLogFilePath());
+       assertThat(logFile).exists();
 
-        assertThat(logEntry).contains("System Action: Startup");
-        assertThat(logEntry).contains("Temperature: 300°C");
-        assertThat(logEntry).contains("Pressure: 1000 psi");
-        assertThat(logEntry).contains("Coolant Flow: 45%");
-        assertThat(logEntry).contains("Radiation Level: Low");
+       try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+
+           String logEntry = reader.readLine();
+
+           assertThat(logEntry).isNotNull();
+           assertThat(logEntry).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.*");
+           assertThat(logEntry).contains("Control Device Name: ");
+           assertThat(logEntry).contains("Control Device Target Value and Unit: ");
+           assertThat(logEntry).contains("Control Device Current Value and Unit: ");
+
+       } catch (IOException e) {
+
+           System.err.println("ERROR: Test failed: " + e.getMessage());
+
+       }
 
     }
 
